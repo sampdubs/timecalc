@@ -148,7 +148,8 @@
                     const data = JSON.parse(request.responseText);
                     console.log(data);
                     let final = ""
-                    for (let element of data.results) {
+                    for (let i = 0; i < data.results.length; i++) {
+                        element = data.results[i]
                         if (element["types"].includes("postal_code")) {
                             final = element["formatted_address"];
                             break;
