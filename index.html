@@ -89,6 +89,7 @@
                     if (updateText) {
                         displayLocation(latitude, longitude);
                     }
+                    updateText = true;
                     const targetDate = times[selected - 1];
                     const timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60
 
