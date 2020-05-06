@@ -64,7 +64,9 @@
         const go = $("#go");
         const time = $("#time");
         let lat, lng;
+        let updateText = true;
         const geocoder = new google.maps.Geocoder();
+
         $('input[type="radio"]').click(handler);
         go.click(handler);
         loc.on('keyup', function (e) {
@@ -72,6 +74,7 @@
                 handler();
             }
         });
+
         function handler() {
             time.text("...")
             const selected = $('input[name=session]:checked').val();
@@ -83,7 +86,9 @@
                 if (status == google.maps.GeocoderStatus.OK) {
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
-                    displayLocation(latitude, longitude);
+                    if (updateText) {
+                        displayLocation(latitude, longitude);
+                    }
                     const targetDate = times[selected - 1];
                     const timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60
 
@@ -108,6 +113,7 @@
                 }
             });
         }
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
@@ -122,10 +128,13 @@
             lng = position.coords.longitude;
             displayLocation(lat, lng);
         }
+
         function geoError() {
             console.log("Geocoder failed.");
         }
+
         $(getLocation);
+
         function displayLocation(latitude, longitude) {
             let request = new XMLHttpRequest();
 
@@ -143,32 +152,35 @@
                             final = element["formatted_address"];
                             break;
                         } else if (element["types"].includes("locality") && element["types"].includes("political")) {
-                            final = element["formatted_address"]
+                            final = element["formatted_address"];
                             break;
                         } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"]
+                            final = element["formatted_address"];
                             break;
                         } else if (element["types"].includes("administrative_area_level_2") && element["types"].includes("political")) {
-                            final = element["formatted_address"]
+                            final = element["formatted_address"];
                             break;
                         } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"]
+                            final = element["formatted_address"];
                             break;
                         } else if (element["types"].includes("country") && element["types"].includes("political")) {
-                            final = element["formatted_address"]
+                            final = element["formatted_address"];
                             break;
                         }
                     }
+
                     if (!final) {
-                        final = data.results[0]["formatted_address"]
+                        final = data.results[0]["formatted_address"];
                     }
+
                     console.log(final);
-                    loc.val(final)
+                    loc.val(final);
+                    updateText = false;
                 }
             };
             request.send();
-
         }
+
     </script>
 
 </body>
