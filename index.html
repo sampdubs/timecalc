@@ -91,7 +91,7 @@
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
                     console.log(url);
 
-                    request = new XMLHttpsRequest();
+                    request = new XMLHttpRequest();
 
                     request.open(method, url);
                     request.onload = function () {
