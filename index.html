@@ -9,42 +9,42 @@
         content="This website can tell you what time the CRS 2020 conference will be at in your local time!">
 </head>
 
-<body>
+<body style="font-family: Arial, Helvetica, sans-serif;">
     <img src="banner.jpg" width=100% />
     <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society session time calculator</h1>
+        <h1>Welcome to the Controlled Release Society time calculator</h1>
     </div>
-    <h3>Please enter your location:</h3>
-    <div>
-        <input type="text" id="loc" placeholder="Enter your location"
-            style="width: 100%; height: 2em; font-size: larger;" />
-    </div>
-    <button id="go" style="width: 10%; height: 5%;font-size: larger; text-align: center; margin: 10px;">Update
-        location</button>
-    <br />
-    <h3>Please select your session:</h3>
-    <div style="padding-left: 5%;">
-        <div>
-            <input type="radio" id="1" name="session" value="1">
-            <label for="1">Technical Session 1</label>
-        </div>
-        <div>
-            <input type="radio" id="2" name="session" value="2">
-            <label for="2">Technical Session 2</label>
-        </div>
-        <div>
-            <input type="radio" id="3" name="session" value="3">
-            <label for="3">Technical Session 3</label>
-        </div>
-        <div>
-            <input type="radio" id="4" name="session" value="4">
-            <label for="4">Technical Session 4</label>
-        </div>
-    </div>
-    <h2 id="time-label" style="background-color: white; display: inline-block;">Please select a session</h2>
-    <div style="text-align: center;">
-        <h1 id="time" style="background-color: white; display: inline-block;">...</h1>
-    </div>
+    <h2>Please select from the events below to learn when it will be held in your local time zone!</h2>
+    <ul style="font-size: 2em;">
+        <li>
+            <a href="/plenary/">Plenary sessions</a>
+        </li>
+        <li>
+            <a href="/technical/">Technical sessions</a>
+        </li>
+        <li>
+            <a href="/techforums/">Technology forums</a>
+        </li>
+        <li>
+            <a href="/exhibition/">Exhibition hall</a>
+        </li>
+        <li>
+            <a href="/workshop/">Post-conference workshops</a>
+        </li>
+        <li>
+            <a href="/firsttimers/">First-timers welcome</a>
+        </li>
+        <li>
+            <a href="/focusgroup/">Focus Group membership meetings</a>
+        </li>
+        <li>
+            <a href="/leadership/">Controlled Release Society leadership meetings</a>
+        </li>
+        <li>
+            <a href="/editorial/">Journal editorial board meetings</a>
+        </li>
+    </ul>
+
     <!-- <br>
     <br>
     <br>
@@ -52,140 +52,6 @@
         <p style="padding-right: 15px;">Like the website? Consider <a href="https://paypal.me/paysampw" 
                 target="blank">donating to the developer</a>!</p>
     </div> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script>
-        const times = [
-            new Date("2020/06/29 11:00:00 +0000"),
-            new Date("2020/06/29 14:00:00 +0000"),
-            new Date("2020/06/30 11:00:00 +0000"),
-            new Date("2020/06/30 14:00:00 +0000")
-        ];
-        const loc = $("#loc");
-        const go = $("#go");
-        const time = $("#time");
-        let lat, lng;
-        let updateText = true;
-        const geocoder = new google.maps.Geocoder();
-
-        $('input[type="radio"]').click(handler);
-        go.click(handler);
-        loc.on('keyup', function (e) {
-            if (e.keyCode === 13) {
-                handler();
-            }
-        });
-
-        function handler() {
-            time.text("...")
-            const selected = $('input[name=session]:checked').val();
-            if (!selected) {
-                alert("Please select a session");
-                return
-            }
-            geocoder.geocode({ 'address': loc.val() }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    const latitude = results[0].geometry.location.lat();
-                    const longitude = results[0].geometry.location.lng();
-                    if (updateText) {
-                        displayLocation(latitude, longitude);
-                    }
-                    updateText = true;
-                    const targetDate = times[selected - 1];
-                    const timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60
-
-                    const method = 'GET';
-                    const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-                    console.log(url);
-
-                    request = new XMLHttpRequest();
-
-                    request.open(method, url);
-                    request.onload = function () {
-                        if (request.status === 200) {
-                            const data = JSON.parse(request.responseText);
-                            const offsets = data.dstOffset * 1000 + data.rawOffset * 1000 // get DST and time zone offsets in milliseconds
-                            const localdate = new Date(timestamp * 1000 + offsets)
-                            const options = { weekday: 'short', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', };
-                            $("#time-label").text("Your session will take place at the following time:");
-                            time.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
-                        }
-                    }
-                    request.send();
-                }
-            });
-        }
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        }
-
-        function geoSuccess(position) {
-            console.log(position.coords.latitude, position.coords.longitude);
-            lat = position.coords.latitude
-            lng = position.coords.longitude;
-            displayLocation(lat, lng);
-        }
-
-        function geoError() {
-            console.log("Geocoder failed.");
-        }
-
-        $(getLocation);
-
-        function displayLocation(latitude, longitude) {
-            let request = new XMLHttpRequest();
-
-            const method = 'GET';
-            const url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-            request.open(method, url, true);
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    const data = JSON.parse(request.responseText);
-                    console.log(data);
-                    let final = ""
-                    for (let i = 0; i < data.results.length; i++) {
-                        element = data.results[i]
-                        if (element["types"].includes("postal_code")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("locality") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_2") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("country") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        }
-                    }
-
-                    if (!final) {
-                        final = data.results[0]["formatted_address"];
-                    }
-
-                    console.log(final);
-                    loc.val(final);
-                    updateText = false;
-                }
-            };
-            request.send();
-        }
-
-    </script>
 
 </body>
 
