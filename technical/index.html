@@ -42,11 +42,11 @@
             <label for="4">Technical Session 4</label>
         </div>
     </div>
-    <h3 id="time-label" style="background-color: white; display: inline-block;">Please select a session</h2>
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h2>
     <div style="text-align: center;" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
-    <h3 class="times" style="background-color: white; display: inline-block;">The session will repeat at the following
+    <h3 class="times" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">The session will repeat at the following
         time:</h2>
     <div style="text-align: center;" class="times">
         <h3 class="inner" id="repeat" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
@@ -122,7 +122,7 @@
                             const data = JSON.parse(request.responseText);
                             const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
                             let localdate = new Date(timestamp * 1000 + offsets);
-                            const options = { weekday: 'short', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                            const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                             $("#time-label").text("This session will take place at the following time:");
                             live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
