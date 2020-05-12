@@ -10,8 +10,8 @@
 </head>
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
-    <h3><a href="/">‹Home</a></h3>
     <img src="../banner.jpg" width=100% />
+    <a href="/"><button><h2>‹Home</h2></button></a>
     <div style="text-align: center;">
         <h1>Welcome to the Controlled Release Society first-timers welcome time calculator</h1>
     </div>
@@ -20,7 +20,7 @@
         <input type="text" id="loc" placeholder="Enter your location"
             style="width: 100%; height: 2em; font-size: larger;" />
     </div>
-    <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 10px;">Update
+    <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
     <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h3>
@@ -50,11 +50,19 @@
             new Date("2020/06/29 06:00:00 -0400"),
             new Date("2020/06/29 12:00:00 -0400"),
             new Date("2020/06/29 18:00:00 -0400"),
-            new Date("2020/06/30 12:00:00 -0400"),
+            new Date("2020/06/30 00:00:00 -0400"),
         ];
         const times = $(".times");
         times.hide();
         const geocoder = new google.maps.Geocoder();
+        let highlight = false;
+
+        loc.click(function () {
+            if (highlight) {
+                $(this).select();
+                highlight = false;
+            }
+        });
 
         go.click(handler);
         loc.on('keyup', function (e) {
@@ -89,7 +97,7 @@
                             for (let targetDate of liveTimes) {
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
                             $("#time-label").text("This session will take place at the following times:");
@@ -114,10 +122,17 @@
 
         function getLocation() {
             if (navigator.geolocation) {
+                loc.val("Retrieving location, please wait...");
                 navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
             } else {
                 console.log("Geolocation is not supported by this browser.");
             }
+        }
+
+        function geoError() {
+            console.log("Geocoder failed.");
+            loc.val("Could not get location, please enter your location");
+            highlight = true;
         }
 
         function geoSuccess(position) {
@@ -157,9 +172,6 @@
             request.send();
         }
 
-        function geoError() {
-            console.log("Geocoder failed.");
-        }
         $(getLocation);
 
         function displayLocation(latitude, longitude) {
