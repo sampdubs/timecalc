@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Plenary Sessions - CRS Time Calculator</title>
+    <title>Technical Sessions - CRS Time Calculator</title>
     <meta name="author" content="Sam Prausnitz-Weinbaum">
     <meta name="description"
         content="This website can tell you what time the CRS 2020 conference will be at in your local time!">
@@ -13,7 +13,7 @@
     <img src="../banner.jpg" width=100% />
     <a href="/"><button><h2>‹Home</h2></button></a>
     <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society plenary session time calculator</h1>
+        <h1>Welcome to the Controlled Release Society technical session time calculator</h1>
     </div>
     <h3>Please enter your location:</h3>
     <div>
@@ -26,33 +26,30 @@
     <h3>Please select your session:</h3>
     <div style="padding-left: 1em;">
         <div>
-            <input type="radio" id="0" name="session" value="0">
-            <label for="0">Opening Plenary Session</label>
+            <input type="radio" id="1" name="session" value="1">
+            <label for="1">Technical Session 1</label>
         </div>
-        <!-- <div>
+        <div>
             <input type="radio" id="2" name="session" value="2">
-            <label for="2">Plenary talk 1: Yoshinori Ohsumi</label>
+            <label for="2">Technical Session 2</label>
         </div>
         <div>
             <input type="radio" id="3" name="session" value="3">
-            <label for="3">Plenary talk 2: Katherine High</label>
+            <label for="3">Technical Session 3</label>
         </div>
         <div>
             <input type="radio" id="4" name="session" value="4">
-            <label for="4">The Magic of Bob Langer</label>
-        </div>
-        <div>
-            <input type="radio" id="5" name="session" value="5">
-            <label for="5">TBD</label>
-        </div> -->
-        <div>
-            <input type="radio" id="1" name="session" value="1">
-            <label for="1">Closing Plenary Session</label>
+            <label for="4">Technical Session 4</label>
         </div>
     </div>
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h3>
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h2>
     <div style="text-align: left;" class="times">
-        <h3 class="inner" id="live" style="background-color: white; display: inline-block; font-weight:normal">...</h3>
+        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
+    </div>
+    <h3 class="times" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">The session will repeat at the following
+        time:</h2>
+    <div style="text-align: left;" class="times">
+        <h3 class="inner" id="repeat" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
         following time:</h2>
@@ -73,76 +70,19 @@
         const loc = $("#loc");
         const go = $("#go");
         const live = $("#live");
-        const programMap = [
-            [
-                [0, 1, 4],
-                [2, 3, 5],
-                [0, 1, 1],
-                [0, 0, 0]
-            ],
-            [
-                [0, 3, 2],
-                [4, 1, 5],
-                [0, 1, 1],
-                [0, 0, 0]
-            ],
-            [
-                [0, 1, 4],
-                [2, 3, 5],
-                [0, 0, 0],
-                [0, 0, 0]
-            ],
-            [
-                [0, 3, 2],
-                [4, 1, 5],
-                [0, 0, 0],
-                [0, 0, 0]
-            ]
-        ]
         const liveTimes = [
-            [[
-                new Date("2020/06/29 04:00:00 -0400"),
-                new Date("2020/06/29 13:00:00 -0400"),
-                new Date("2020/06/29 16:00:00 -0400"),
-                new Date("2020/06/30 01:00:00 -0400")
-            ], "Opening Session", 0.5],
-            [[
-                new Date("2020/06/29 04:30:00 -0400"),
-                new Date("2020/06/30 13:30:00 -0400"),
-                new Date("2020/06/29 16:30:00 -0400"),
-                new Date("2020/07/01 01:30:00 -0400")
-            ], "Plenary: Yoshinori Ohsumi", 1],
-            [[
-                new Date("2020/06/30 04:00:00 -0400"),
-                new Date("2020/06/29 14:00:00 -0400"),
-                new Date("2020/06/30 16:00:00 -0400"),
-                new Date("2020/06/30 02:00:00 -0400")
-            ], "Plenary: Katherine High", 1],
-            [[
-                new Date("2020/06/30 05:00:00 -0400"),
-                new Date("2020/06/29 13:30:00 -0400"),
-                new Date("2020/06/30 17:00:00 -0400"),
-                new Date("2020/06/30 01:30:00 -0400")
-            ], "The Magic of Bob Langer", 0.5],
-            [[
-                new Date("2020/06/29 05:30:00 -0400"),
-                new Date("2020/06/30 13:00:00 -0400"),
-                new Date("2020/06/29 17:30:00 -0400"),
-                new Date("2020/07/01 01:00:00 -0400")
-            ], "TBD", 0.5],
-            [[
-                new Date("2020/06/30 05:30:00 -0400"),
-                new Date("2020/06/30 14:30:00 -0400"),
-                new Date("2020/06/30 17:30:00 -0400"),
-                new Date("2020/07/01 02:30:00 -0400")
-            ], "Closing session", 0.5]
+            new Date("2020/06/29 07:00:00 -0400"),
+            new Date("2020/06/29 10:00:00 -0400"),
+            new Date("2020/06/30 07:00:00 -0400"),
+            new Date("2020/06/30 10:00:00 -0400")
         ];
-        const programs = [
-            "<u>The LIVE Program for Europe, Africa, Asia, and Australia</u>",
-            "<u>The LIVE Program for the Americas</u>",
-            "<u>The Western Americas Program</u>",
-            "<u>The Western Pacific Program</u>"
-        ]
+        const repeat = $("#repeat");
+        const repeatTimes = [
+            new Date("2020/06/29 19:00:00 -0400"),
+            new Date("2020/06/29 22:00:00 -0400"),
+            new Date("2020/06/30 19:00:00 -0400"),
+            new Date("2020/06/30 22:00:00 -0400")
+        ];
         const times = $(".times");
         times.hide();
         let lat, lng;
@@ -176,7 +116,8 @@
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let timestamp = liveTimes[0][0][0].getTime() / 1000 + liveTimes[0][0][0].getTimezoneOffset() * 60;
+                    let targetDate = liveTimes[selected - 1];
+                    let timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
 
                     const method = 'GET';
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -188,25 +129,17 @@
                         if (request.status === 200) {
                             const data = JSON.parse(request.responseText);
                             const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
+                            let localdate = new Date(timestamp * 1000 + offsets);
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-                            let lTimes = []
-                            for (let i = 0; i < 4; i ++) {
-                                let programInner = programs[i];
-                                for (let j = 0; j < programMap[i][selected].length; j++) {
-                                    const index = programMap[i][selected][j];
-                                    let targetDate = liveTimes[index][0][i];
-                                    timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                    localdate = new Date(timestamp * 1000 + offsets);
-                                    programInner += "<p style='padding-left: 1em; padding-top:1em; margin: 0'>" + liveTimes[index][1] + (programMap[i][selected * 1 + 2][j] ? " (LIVE):" : ":") + "</p>";
-                                    programInner += "<p style='padding-left: 3em; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(liveTimes[index][2], 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
-                                }
-                                lTimes.push(programInner);
-                            }
+                            $("#time-label").text("This session will take place LIVE at the following time:");
+                            live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
 
-                            $("#time-label").text("This session will take place at the following times:");
-                            live.html(lTimes.join("<br>"));
+                            targetDate = repeatTimes[selected - 1];
+                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                            localdate = new Date(timestamp * 1000 + offsets);
+                            repeat.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+
 
                             times.show();
                         } else {
@@ -257,7 +190,6 @@
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     const data = JSON.parse(request.responseText);
-
                     let final = ""
                     for (let i = 0; i < data.results.length; i++) {
                         element = data.results[i]

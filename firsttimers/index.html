@@ -25,7 +25,7 @@
     <br />
     <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h3>
     <div style="text-align: left;" class="times">
-        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
+        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal">...</h3>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
         following time:</h2>
@@ -52,6 +52,12 @@
             new Date("2020/06/29 18:00:00 -0400"),
             new Date("2020/06/30 00:00:00 -0400"),
         ];
+        const programs = [
+            "<u>The LIVE Program for Europe, Africa, Asia, and Australia</u>",
+            "<u>The LIVE Program for the Americas</u>",
+            "<u>The Western Americas Program</u>",
+            "<u>The Western Pacific Program</u>"
+        ]
         const times = $(".times");
         times.hide();
         const geocoder = new google.maps.Geocoder();
@@ -94,7 +100,8 @@
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                             let lTimes = []
-                            for (let targetDate of liveTimes) {
+                            for (let i = 0; i < 4; i ++) {
+                                let targetDate = liveTimes[i];
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
                                 lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
@@ -155,10 +162,11 @@
                     const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                     let lTimes = []
-                    for (let targetDate of liveTimes) {
+                    for (let i = 0; i < 4; i ++) {
+                        let targetDate = liveTimes[i];
                         timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                         localdate = new Date(timestamp * 1000 + offsets);
-                        lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                        lTimes.push(programs[i] + ":<br><p style='padding-left: 1em; padding-top:8px; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>");
                     }
 
                     $("#time-label").text("This session will take place at the following times:");
