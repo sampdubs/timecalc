@@ -23,18 +23,7 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3>Please select your session:</h3>
-    <div style="padding-left: 1em;">
-        <div>
-            <input type="radio" id="1" name="session" value="1">
-            <label for="1">Technology forum 1</label>
-        </div>
-        <div>
-            <input type="radio" id="2" name="session" value="2">
-            <label for="2">Technology forum 2</label>
-        </div>
-    </div>
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h3>
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h3>
     <div style="text-align: left;" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal">...</h3>
     </div>
@@ -79,7 +68,6 @@
         ]
         const times = $(".times");
         times.hide();
-        let lat, lng;
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -100,18 +88,12 @@
 
         function handler() {
             $(".inner").text("...");
-            const selected = $('input[name=session]:checked').val();
-            if (!selected) {
-                alert("Please select a session");
-                return;
-            }
             geocoder.geocode({ 'address': loc.val() }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let targetDates = liveTimes[selected - 1];
-                    let timestamp = targetDates[0].getTime() / 1000 + targetDates[0].getTimezoneOffset() * 60;
+                    let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
 
                     const method = 'GET';
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -127,11 +109,16 @@
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                             let lTimes = []
-                            for (let i = 0; i < 4; i ++) {
-                                let targetDate = liveTimes[selected - 1][i];
-                                timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(programs[i] + ":<br><p style='padding-left: 1em; padding-top:8px; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>");
+                            for (let i = 0; i < 4; i++) {
+                                let programInner = programs[i];
+                                for (let j = 0; j < 2; j++) {
+                                    let targetDate = liveTimes[j][i];
+                                    timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                                    localdate = new Date(timestamp * 1000 + offsets);
+                                    programInner += "<p style='padding-left: 1em; padding-top:1em; margin: 0'>Technology Forum " + (j + 1) + "</p>";
+                                    programInner += "<p style='padding-left: 3em; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
+                                }
+                                lTimes.push(programInner);
                             }
 
                             $("#time-label").text("This session will take place at the following times:");
@@ -164,9 +151,46 @@
         }
 
         function geoSuccess(position) {
-            lat = position.coords.latitude
-            lng = position.coords.longitude;
-            displayLocation(lat, lng);
+            const latitude = position.coords.latitude
+            const longitude = position.coords.longitude;
+            displayLocation(latitude, longitude);
+            let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
+
+            const method = 'GET';
+            const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
+
+            request = new XMLHttpRequest();
+
+            request.open(method, url);
+            request.onload = function () {
+                if (request.status === 200) {
+                    const data = JSON.parse(request.responseText);
+                    const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
+
+                    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+                    let lTimes = []
+                    for (let i = 0; i < 4; i++) {
+                        let programInner = programs[i];
+                        for (let j = 0; j < 2; j++) {
+                            let targetDate = liveTimes[j][i];
+                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                            localdate = new Date(timestamp * 1000 + offsets);
+                            programInner += "<p style='padding-left: 1em; padding-top:1em; margin: 0'>Technology Forum " + (j + 1) + "</p>";
+                            programInner += "<p style='padding-left: 3em; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
+                        }
+                        lTimes.push(programInner);
+                    }
+
+                    $("#time-label").text("This session will take place at the following times:");
+                    live.html(lTimes.join("<br>"));
+
+                    times.show();
+                } else {
+                    fail();
+                }
+            }
+            request.send();
         }
 
         function geoError() {
