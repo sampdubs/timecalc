@@ -13,7 +13,7 @@
     <img src="../banner.jpg" width=100% />
     <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society journal editorial board meetings time calculator</h1>
+        <h1>Welcome to the Controlled Release Society Journal Editorial Board Meetings Time Calculator</h1>
     </div>
     <h3>Please enter your location:</h3>
     <div>
@@ -39,8 +39,6 @@
         </div>
     </div>
     <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a meeting</h3><br>
-    <h3 style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">TBD</h3>
-    when ready
     <div style="text-align: left; display: none" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
@@ -64,7 +62,7 @@
         const go = $("#go");
         const live = $("#live");
         const liveTimes = [
-            [new Date("1990/01/01 00:00:00 +0000")],
+            [new Date("1990/02/01 00:00:00 +0000")],
             [new Date("2020/07/01 06:00:00 -0400")],
             [
                 new Date("2020/07/01 10:00:00 -0400"),
@@ -127,6 +125,10 @@
                             for (let targetDate of liveTimes[selected - 1]) {
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
+                                if (localdate.getFullYear() == 1990) {
+                                    lTimes.push("TBD");
+                                    continue;
+                                }
                                 lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
