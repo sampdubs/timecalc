@@ -11,7 +11,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <img src="../banner.jpg" width=100% />
-    <a href="/"><button><h2>‹Home</h2></button></a>
+    <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
         <h1>Welcome to the Controlled Release Society journal editorial board meetings time calculator</h1>
     </div>
@@ -23,7 +23,7 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3>Please select your session:</h3>
+    <h3>Please select your meeting:</h3>
     <div style="padding-left: 1em;">
         <div>
             <input type="radio" id="1" name="session" value="1">
@@ -38,8 +38,10 @@
             <label for="3">Advanced Drug Delivery Reviews editorial board meeting</label>
         </div>
     </div>
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h3>
-    <div style="text-align: left;" class="times">
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a meeting</h3><br>
+    <h3 style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">TBD</h3>
+    when ready
+    <div style="text-align: left; display: none" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
@@ -71,6 +73,9 @@
         ];
         const times = $(".times");
         times.hide();
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
+        }
         let lat, lng;
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
@@ -94,7 +99,7 @@
             $(".inner").text("...");
             const selected = $('input[name=session]:checked').val();
             if (!selected) {
-                alert("Please select a session");
+                alert("Please select a meeting");
                 return;
             }
             geocoder.geocode({ 'address': loc.val() }, function (results, status) {
@@ -125,7 +130,7 @@
                                 lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
-                            $("#time-label").text(`This session will take place at the following time${liveTimes[selected - 1][0].length > 1 ? "s" : ""}:`);
+                            $("#time-label").text(`This meeting will take place at the following time${liveTimes[selected - 1][0].length > 1 ? "s" : ""}:`);
                             live.html(lTimes.join("<br>"));
                             
                             times.show();

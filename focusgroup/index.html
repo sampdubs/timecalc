@@ -11,7 +11,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <img src="../banner.jpg" width=100% />
-    <a href="/"><button><h2>‹Home</h2></button></a>
+    <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
         <h1>Welcome to the Controlled Release Society focus group membership meetings time calculator</h1>
     </div>
@@ -49,6 +49,9 @@
         const liveTime = new Date("2020/06/29 09:00:00 -0400");
         const times = $(".times");
         times.hide();
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
+        }
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -130,6 +133,7 @@
             longitude = position.coords.longitude;
             displayLocation(latitude, longitude);
             let timestamp = liveTime.getTime() / 1000 + liveTime.getTimezoneOffset() * 60;
+
             const method = 'GET';
             const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
 
@@ -146,11 +150,7 @@
                     let localdate = new Date(timestamp * 1000 + offsets);
 
                     $("#time-label").text("This session will take place at the following time:");
-                    live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
-
-                    timestamp = repeatTime.getTime() / 1000 + repeatTime.getTimezoneOffset() * 60;
-                    localdate = new Date(timestamp * 1000 + offsets);
-                    repeat.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                    live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
 
                     times.show();
                 } else {

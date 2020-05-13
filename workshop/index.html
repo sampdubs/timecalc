@@ -11,7 +11,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <img src="../banner.jpg" width=100% />
-    <a href="/"><button><h2>‹Home</h2></button></a>
+    <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
         <h1>Welcome to the Controlled Release Society post-conference workshops time calculator</h1>
     </div>
@@ -27,7 +27,7 @@
     <div style="text-align: left;" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
-    <h3 class="times" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">The session will repeat at the following
+    <h3 class="times" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">The workshops will repeat at the following
         time:</h3>
     <div style="text-align: left;" class="times">
         <h3 class="inner" id="repeat" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
@@ -56,6 +56,9 @@
         const repeatTime = new Date("2020/07/01 18:00:00 -0400");
         const times = $(".times");
         times.hide();
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
+        }
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -97,7 +100,7 @@
 
                             let localdate = new Date(timestamp * 1000 + offsets);
 
-                            $("#time-label").text("This session will take place LIVE at the following time:");
+                            $("#time-label").text("The workshops will take place LIVE at the following time:");
                             live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
 
                             timestamp = repeatTime.getTime() / 1000 + repeatTime.getTimezoneOffset() * 60;
@@ -156,7 +159,7 @@
 
                     let localdate = new Date(timestamp * 1000 + offsets);
 
-                    $("#time-label").text("This session will take place LIVE at the following time:");
+                    $("#time-label").text("The workshops will take place LIVE at the following time:");
                     live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
 
                     timestamp = repeatTime.getTime() / 1000 + repeatTime.getTimezoneOffset() * 60;
