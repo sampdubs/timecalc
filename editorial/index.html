@@ -68,7 +68,7 @@
                 new Date("2020/07/02 09:00:00 -0400"),
                 new Date("2020/07/02 20:00:00 -0400")
             ],
-            [new Date("2020/07/01 06:00:00 -0400")],
+            [new Date("2020/07/01 07:00:00 -0400")],
             [
                 new Date("2020/07/01 10:00:00 -0400"),
                 new Date("2020/07/01 21:00:00 -0400")
@@ -130,10 +130,10 @@
                             for (let targetDate of liveTimes[selected - 1]) {
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(selected == 2 ? 1.5 : 1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
-                            $("#time-label").text(`This meeting will take place at the following time${liveTimes[selected - 1][0].length > 1 ? "s" : ""}:`);
+                            $("#time-label").text(`This meeting will take place at the following time${liveTimes[selected - 1].length > 1 ? "s" : ""}:`);
                             live.html(lTimes.join("<br>"));
                             
                             times.show();
