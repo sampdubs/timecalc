@@ -54,9 +54,15 @@
         const loc = $("#loc");
         const go = $("#go");
         const live = $("#live");
-        const liveTime = new Date("2020/07/01 07:00:00 -0400");
+        const liveTimes = [
+            new Date("2020/07/01 08:00:00 -0400"),
+            new Date("2020/07/02 08:00:00 -0400")
+        ]
         const repeat = $("#repeat");
-        const repeatTime = new Date("2020/07/01 18:00:00 -0400");
+        const repeatTimes = [
+            new Date("2020/07/01 19:00:00 -0400"),
+            new Date("2020/07/02 19:00:00 -0400")
+        ]
         const times = $(".times");
         times.hide();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
@@ -86,7 +92,7 @@
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let timestamp = liveTime.getTime() / 1000 + liveTime.getTimezoneOffset() * 60;
+                    let timestamp = liveTimes[0].getTime() / 1000 + liveTimes[0].getTimezoneOffset() * 60;
 
                     const method = 'GET';
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -101,14 +107,28 @@
 
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-                            let localdate = new Date(timestamp * 1000 + offsets);
 
                             $("#time-label").text("The workshops will take place LIVE at the following time:");
-                            live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                            let lTimes = [];
+                            for (let i = 0; i < liveTimes.length; i ++) {
+                                timestamp = liveTimes[i].getTime() / 1000 + liveTimes[i].getTimezoneOffset() * 60;
+                                let localdate = new Date(timestamp * 1000 + offsets);
+                                lTimes.push(`Workshop ${["A", "B"][i]}: `);
+                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(4, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "<br>");
+                            }
+                            live.html(lTimes.join(""));
 
-                            timestamp = repeatTime.getTime() / 1000 + repeatTime.getTimezoneOffset() * 60;
-                            localdate = new Date(timestamp * 1000 + offsets);
-                            repeat.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                            let rTimes = [];
+                            for (let i = 0; i < repeatTimes.length; i ++) {
+                                timestamp = repeatTimes[i].getTime() / 1000 + repeatTimes[i].getTimezoneOffset() * 60;
+                                let localdate = new Date(timestamp * 1000 + offsets);
+                                rTimes.push(`Workshop ${["A", "B"][i]}: `);
+                                rTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(4, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "<br>");
+                            }
+                            repeat.html(rTimes.join(""));
+                            // timestamp = repeatTime.getTime() / 1000 + repeatTime.getTimezoneOffset() * 60;
+                            // localdate = new Date(timestamp * 1000 + offsets);
+                            // repeat.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
 
                             times.show();
                         } else {
