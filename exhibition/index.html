@@ -54,13 +54,17 @@
                 new Date("2020/06/29 06:00:00 -0400"),
                 new Date("2020/06/29 09:00:00 -0400"),
                 new Date("2020/06/30 06:00:00 -0400"),
-                new Date("2020/06/30 09:00:00 -0400")
+                new Date("2020/06/30 09:00:00 -0400"),
+                new Date("2020/07/01 12:00:00 -0400"),
+                new Date("2020/07/02 12:00:00 -0400")
             ],
             [
                 new Date("2020/06/29 09:00:00 -0400"),
                 new Date("2020/06/29 12:00:00 -0400"),
                 new Date("2020/06/30 09:00:00 -0400"),
-                new Date("2020/06/30 12:00:00 -0400")
+                new Date("2020/06/30 12:00:00 -0400"),
+                new Date("2020/07/01 12:00:00 -0400"),
+                new Date("2020/07/02 12:00:00 -0400")
             ],
             [
                 new Date("2020/06/29 18:00:00 -0400"),
@@ -132,7 +136,7 @@
                                     targetDate = liveTimes[i][j];
                                     timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                     localdate = new Date(timestamp * 1000 + offsets);
-                                    inner += `<p style="padding-left: 1em; padding-top: 8px; ${j == 1 ? 'padding-bottom: 8px; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
+                                    inner += `<p style="padding-left: 1em; padding-top: 8px; ${j == 1 || j > 2 ? 'padding-bottom: 8px; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(j < 4 ? 1 : 1.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
                                 }
                                 lTimes.push(inner);
                             }
