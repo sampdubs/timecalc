@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>First-Timers Welcome - CRS Time Calculator</title>
+    <title>Women in Science - CRS Time Calculator</title>
     <meta name="author" content="Sam Prausnitz-Weinbaum">
     <meta name="description"
         content="This website can tell you what time the CRS 2020 conference will be at in your local time!">
@@ -13,9 +13,9 @@
     <img src="../banner.jpg" width=100% />
     <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society First-Timers Welcome Time Calculator</h1>
+        <h1>Welcome to the Controlled Release Society Women in Science Time Calculator</h1>
     </div>
-    <h3>Please enter your location:</h3>
+    <h4>Please enter your location:</h3>
     <div>
         <input type="text" id="loc" placeholder="Enter your location"
             style="width: 100%; height: 2em; font-size: larger;" />
@@ -23,9 +23,12 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h3>
+    <h4 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-weight: normal;">Please enter your location</h3>
     <div style="text-align: left;" class="times">
-        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal; padding-left: 1em;">...</h3>
+        <br>
+        <h4 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight: bold; padding-left: 1em;">...</h3>
+        <h4 style="background-color: white; display: inline-block; font-weight: normal; margin-top: 0;">We are looking forward to hosting you and we guarantee virtual mingling with women CRS past presidents, past Women in Science Award Winners and peers in an open and welcoming atmosphere. Hope to “see” you there!</h3>
+        <br><br><br>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
         following time:</h2>
@@ -50,10 +53,8 @@
         const go = $("#go");
         const live = $("#live");
         const liveTimes = [
-            new Date("2020/06/29 06:00:00 -0400"),
-            new Date("2020/06/29 12:00:00 -0400"),
-            new Date("2020/06/29 18:00:00 -0400"),
-            new Date("2020/06/30 00:00:00 -0400")
+            new Date("2020/06/29 15:00:00 -0400"),
+            new Date("2020/06/30 02:45:00 -0400"),
         ];
         const times = $(".times");
         times.hide();
@@ -100,15 +101,16 @@
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                             let lTimes = []
-                            for (let i = 0; i < 4; i ++) {
+                            for (let i = 0; i < liveTimes.length; i ++) {
                                 let targetDate = liveTimes[i];
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
-                            $("#time-label").text("This session will take place at the following times:");
-                            live.html(lTimes.join("<br>"));
+                            $("#time-label").html(`The Women in Science (WIS) event at this year’s CRS Annual Meeting will be a virtual event in a friendly and engaging atmosphere. This event is a networking and inspiring opportunity that is especially tailored for female attendees.<br><br>We will open the session with our awardee, Professor Maria José Alonso from the University of Santiago de Compostela, Spain. Maria will give a lecture on her personal and professional journey to become one of the leading experts in the field of nanopharmaceutical development which will be followed by Q&A.<br><br>Please bring a drink with you, log on and get ready to have an interactive session with Prof Alonso as well as all other female leaders that will be available in the audience both from the WIS committee and broader CRS community. We encourage you to send your questions ahead of the event to ruth.b.schmid@sintef.no to guarantee a smooth and efficient session. You will of course also have the chance to ask questions live if that is your preference! <br><br>In order to accommodate different time zones, we will offer two live sessions; please attend either one:`);
+
+                            live.html(lTimes.join("<br><br>"));
 
                             times.show();
                         } else {
@@ -162,15 +164,16 @@
                     const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                     let lTimes = []
-                    for (let i = 0; i < 4; i ++) {
+                    for (let i = 0; i < liveTimes.length; i ++) {
                         let targetDate = liveTimes[i];
                         timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                         localdate = new Date(timestamp * 1000 + offsets);
-                        lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                        lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                     }
 
-                    $("#time-label").text("This session will take place at the following times:");
-                    live.html(lTimes.join("<br>"));
+                    $("#time-label").html(`The Women in Science (WIS) event at this year’s CRS Annual Meeting will be a virtual event in a friendly and engaging atmosphere. This event is a networking and inspiring opportunity that is especially tailored for female attendees.<br><br>We will open the session with our awardee, Professor Maria José Alonso from the University of Santiago de Compostela, Spain. Maria will give a lecture on her personal and professional journey to become one of the leading experts in the field of nanopharmaceutical development which will be followed by Q&A.<br><br>Please bring a drink with you, log on and get ready to have an interactive session with Prof Alonso as well as all other female leaders that will be available in the audience both from the WIS committee and broader CRS community. We encourage you to send your questions ahead of the event to ruth.b.schmid@sintef.no to guarantee a smooth and efficient session. You will of course also have the chance to ask questions live if that is your preference! <br><br>In order to accommodate different time zones, we will offer two live sessions; please attend either one:`);
+
+                    live.html(lTimes.join("<br><br>"));
 
                     times.show();
                 } else {

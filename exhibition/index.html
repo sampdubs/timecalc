@@ -50,41 +50,21 @@
         const go = $("#go");
         const live = $("#live");
         const liveTimes = [
-            [
                 new Date("2020/06/29 06:00:00 -0400"),
                 new Date("2020/06/29 09:00:00 -0400"),
-                new Date("2020/06/30 06:00:00 -0400"),
-                new Date("2020/06/30 09:00:00 -0400"),
-                new Date("2020/07/01 12:00:00 -0400"),
-                new Date("2020/07/02 12:00:00 -0400")
-            ],
-            [
-                new Date("2020/06/29 09:00:00 -0400"),
                 new Date("2020/06/29 12:00:00 -0400"),
-                new Date("2020/06/30 09:00:00 -0400"),
-                new Date("2020/06/30 12:00:00 -0400"),
-                new Date("2020/07/01 12:00:00 -0400"),
-                new Date("2020/07/02 12:00:00 -0400")
-            ],
-            [
                 new Date("2020/06/29 18:00:00 -0400"),
                 new Date("2020/06/29 21:00:00 -0400"),
-                new Date("2020/06/30 18:00:00 -0400"),
-                new Date("2020/06/30 21:00:00 -0400")
-            ],
-            [
-                new Date("2020/06/29 21:00:00 -0400"),
                 new Date("2020/06/30 00:00:00 -0400"),
+                new Date("2020/06/30 06:00:00 -0400"),
+                new Date("2020/06/30 09:00:00 -0400"),
+                new Date("2020/06/30 12:00:00 -0400"),
+                new Date("2020/06/30 18:00:00 -0400"),
                 new Date("2020/06/30 21:00:00 -0400"),
                 new Date("2020/07/01 00:00:00 -0400"),
-            ]
+                new Date("2020/07/01 12:00:00 -0400"),
+                new Date("2020/07/02 12:00:00 -0400")
         ];
-        const programs = [
-            "<u>The LIVE Program for Europe, Africa, Asia, and Australia</u>",
-            "<u>The LIVE Program for the Americas</u>",
-            "<u>The Western Americas Program</u>",
-            "<u>The Western Pacific Program</u>"
-        ]
         const times = $(".times");
         times.hide();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
@@ -114,7 +94,7 @@
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
+                    let timestamp = liveTimes[0].getTime() / 1000 + liveTimes[0].getTimezoneOffset() * 60;
 
                     const method = 'GET';
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -130,19 +110,15 @@
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                             let lTimes = []
-                            for (let i = 0; i < 4; i ++) {
-                                let inner = programs[i] + ":";
-                                for (let j = 0; j < liveTimes[i].length; j++) {
-                                    targetDate = liveTimes[i][j];
-                                    timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                    localdate = new Date(timestamp * 1000 + offsets);
-                                    inner += `<p style="padding-left: 1em; padding-top: 8px; ${j == 1 || j > 2 ? 'padding-bottom: 8px; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(j < 4 ? 1 : 1.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
-                                }
-                                lTimes.push(inner);
+                            for (let i = 0; i < liveTimes.length; i ++) {
+                                targetDate = liveTimes[i];
+                                timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                                localdate = new Date(timestamp * 1000 + offsets);
+                                lTimes.push(`<p style="padding-left: 1em; padding-top: 8px; ${i % 3 == 2 ? 'padding-bottom: 1em; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(i < 12 ? 1 : 1.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>");
                             }
 
                             $("#time-label").text("This session will take place at the following times:");
-                            live.html(lTimes.join("<br>"));
+                            live.html(lTimes.join(""));
 
                             times.show();
                         } else {
@@ -174,7 +150,7 @@
             latitude = position.coords.latitude
             longitude = position.coords.longitude;
             displayLocation(latitude, longitude);
-            let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
+            let timestamp = liveTimes[0].getTime() / 1000 + liveTimes[0].getTimezoneOffset() * 60;
 
             const method = 'GET';
             const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -190,19 +166,15 @@
                     const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                     let lTimes = []
-                    for (let i = 0; i < 4; i ++) {
-                        let inner = programs[i] + ":";
-                        for (let j = 0; j < liveTimes[i].length; j++) {
-                            targetDate = liveTimes[i][j];
-                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                            localdate = new Date(timestamp * 1000 + offsets);
-                            inner += `<p style="padding-left: 1em; padding-top: 8px; ${j == 1 ? 'padding-bottom: 8px; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
-                        }
-                        lTimes.push(inner);
+                    for (let i = 0; i < liveTimes.length; i ++) {
+                        targetDate = liveTimes[i];
+                        timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                        localdate = new Date(timestamp * 1000 + offsets);
+                        lTimes.push(`<p style="padding-left: 1em; padding-top: 8px; ${i % 3 == 2 ? 'padding-bottom: 1em; ' : ''}margin: 0;">` + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(i < 12 ? 1 : 1.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>");
                     }
 
                     $("#time-label").text("This session will take place at the following times:");
-                    live.html(lTimes.join("<br>"));
+                    live.html(lTimes.join(""));
 
                     times.show();
                 } else {

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>First-Timers Welcome - CRS Time Calculator</title>
+    <title>Technology Forums - CRS Time Calculator</title>
     <meta name="author" content="Sam Prausnitz-Weinbaum">
     <meta name="description"
         content="This website can tell you what time the CRS 2020 conference will be at in your local time!">
@@ -13,7 +13,7 @@
     <img src="../banner.jpg" width=100% />
     <span id="mobile-hide"><a href="/"><button><h2>‹Home</h2></button></a></span>
     <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society First-Timers Welcome Time Calculator</h1>
+        <h1>Welcome to the Controlled Release Society Technology Forums Time Calculator</h1>
     </div>
     <h3>Please enter your location:</h3>
     <div>
@@ -23,9 +23,20 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h3>
+    <h3>Please select your session:</h3>
+    <div style="padding-left: 1em;">
+        <div>
+            <input type="radio" id="1" name="session" value="1">
+            <label for="1">Technology forum 1</label>
+        </div>
+        <div>
+            <input type="radio" id="2" name="session" value="2">
+            <label for="2">Technology forum 2</label>
+        </div>
+    </div>
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h3>
     <div style="text-align: left;" class="times">
-        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal; padding-left: 1em;">...</h3>
+        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal">...</h3>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
         following time:</h2>
@@ -39,7 +50,7 @@
         <p style="padding-right: 15px;">Like the website? Consider <a href="https://paypal.me/paysampw" 
                 target="blank">donating to the developer</a>!</p>
     </div> -->
-    <div style="position: fixed; text-align: right; bottom: 0px; width: 100%; z-index: -1;">
+    <div style="position: fixed; text-align: right; bottom: 0px; width: 100%;">
         <p style="padding-right: 15px;">Notice something wrong? <a href="mailto:sammypw1@gmail.com?Subject=CRS%20Time%20Calculator%20website%20feedback">Contact us</a>!</p>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -50,16 +61,31 @@
         const go = $("#go");
         const live = $("#live");
         const liveTimes = [
-            new Date("2020/06/29 06:00:00 -0400"),
-            new Date("2020/06/29 12:00:00 -0400"),
-            new Date("2020/06/29 18:00:00 -0400"),
-            new Date("2020/06/30 00:00:00 -0400")
+            [
+                new Date("2020/06/29 06:00:00 -0400"),
+                new Date("2020/06/29 12:00:00 -0400"),
+                new Date("2020/06/29 18:00:00 -0400"),
+                new Date("2020/06/30 00:00:00 -0400")
+            ],
+            [
+                new Date("2020/06/30 06:00:00 -0400"),
+                new Date("2020/06/30 12:00:00 -0400"),
+                new Date("2020/06/30 18:00:00 -0400"),
+                new Date("2020/07/01 00:00:00 -0400")
+            ]
         ];
+        const programs = [
+            "<u>The LIVE Program for Europe, Africa, Asia, and Australia</u>",
+            "<u>The LIVE Program for the Americas</u>",
+            "<u>The Western Americas Program</u>",
+            "<u>The Western Pacific Program</u>"
+        ]
         const times = $(".times");
         times.hide();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
             $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
         }
+        let lat, lng;
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -70,6 +96,7 @@
             }
         });
 
+        $('input[type="radio"]').click(handler);
         go.click(handler);
         loc.on('keyup', function (e) {
             if (e.keyCode === 13) {
@@ -77,14 +104,20 @@
             }
         });
 
-        function handler(lat, lng) {
+        function handler() {
             $(".inner").text("...");
+            const selected = $('input[name=session]:checked').val();
+            if (!selected) {
+                alert("Please select a session");
+                return;
+            }
             geocoder.geocode({ 'address': loc.val() }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let timestamp = liveTimes[0].getTime() / 1000 + liveTimes[0].getTimezoneOffset() * 60;
+                    let targetDates = liveTimes[selected - 1];
+                    let timestamp = targetDates[0].getTime() / 1000 + targetDates[0].getTimezoneOffset() * 60;
 
                     const method = 'GET';
                     const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
@@ -101,10 +134,10 @@
 
                             let lTimes = []
                             for (let i = 0; i < 4; i ++) {
-                                let targetDate = liveTimes[i];
+                                let targetDate = liveTimes[selected - 1][i];
                                 timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                 localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+                                lTimes.push(programs[i] + ":<br><p style='padding-left: 1em; padding-top:8px; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>");
                             }
 
                             $("#time-label").text("This session will take place at the following times:");
@@ -136,50 +169,17 @@
             }
         }
 
+        function geoSuccess(position) {
+            lat = position.coords.latitude
+            lng = position.coords.longitude;
+            displayLocation(lat, lng);
+        }
+
         function geoError() {
             console.log("Geocoder failed.");
             loc.val("Could not get location, please enter your location");
             highlight = true;
         }
-
-        function geoSuccess(position) {
-            latitude = position.coords.latitude
-            longitude = position.coords.longitude;
-            displayLocation(latitude, longitude);
-            let timestamp = liveTimes[0].getTime() / 1000 + liveTimes[0].getTimezoneOffset() * 60;
-
-            const method = 'GET';
-            const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-            request = new XMLHttpRequest();
-
-            request.open(method, url);
-            request.onload = function () {
-                if (request.status === 200) {
-                    const data = JSON.parse(request.responseText);
-                    const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
-                    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
-                    let lTimes = []
-                    for (let i = 0; i < 4; i ++) {
-                        let targetDate = liveTimes[i];
-                        timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                        localdate = new Date(timestamp * 1000 + offsets);
-                        lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(0.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
-                    }
-
-                    $("#time-label").text("This session will take place at the following times:");
-                    live.html(lTimes.join("<br>"));
-
-                    times.show();
-                } else {
-                    fail();
-                }
-            }
-            request.send();
-        }
-
         $(getLocation);
 
         function displayLocation(latitude, longitude) {
