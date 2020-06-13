@@ -23,49 +23,11 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3>Please select your session:</h3>
-    <div style="padding-left: 1em;">
-        <div>
-            <input type="radio" id="0" name="session" value="0">
-            <label for="0">Opening Plenary Session</label>
-        </div>
-        <!-- <div>
-            <input type="radio" id="2" name="session" value="2">
-            <label for="2">Plenary talk 1: Yoshinori Ohsumi</label>
-        </div>
-        <div>
-            <input type="radio" id="3" name="session" value="3">
-            <label for="3">Plenary talk 2: Katherine High</label>
-        </div>
-        <div>
-            <input type="radio" id="4" name="session" value="4">
-            <label for="4">The Magic of Bob Langer</label>
-        </div>
-        <div>
-            <input type="radio" id="5" name="session" value="5">
-            <label for="5">TBD</label>
-        </div> -->
-        <div>
-            <input type="radio" id="1" name="session" value="1">
-            <label for="1">Closing Plenary Session</label>
-        </div>
-    </div>
     <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h3>
     <div style="text-align: left;" class="times">
         <h3 class="inner" id="live" style="background-color: white; display: inline-block; font-weight:normal">...</h3>
     </div>
-    <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
-        following time:</h2>
-    <div style="text-align: center;">
-        <h1 id="on-demand" style="background-color: white; display: inline-block;">Some date - another date</h1>
-    </div> -->
-    <!-- <br>
-    <br>
-    <br>
-    <div style="position: fixed; text-align: right; bottom: 0px; width: 100%; z-index: -1;">
-        <p style="padding-right: 15px;">Like the website? Consider <a href="https://paypal.me/paysampw" 
-                target="blank">donating to the developer</a>!</p>
-    </div> -->
+
     <div style="position: fixed; text-align: right; bottom: 0px; width: 100%;">
         <p style="padding-right: 15px;">Notice something wrong? <a href="mailto:sammypw1@gmail.com?Subject=CRS%20Time%20Calculator%20website%20feedback">Contact us</a>!</p>
     </div>
@@ -76,82 +38,37 @@
         const loc = $("#loc");
         const go = $("#go");
         const live = $("#live");
-        const programMap = [
-            [
-                [0, 1, 4],
-                [2, 3, 5],
-                [0, 1, 1],
-                [0, 0, 0]
-            ],
-            [
-                [0, 3, 2],
-                [4, 1, 5],
-                [0, 1, 1],
-                [0, 0, 0]
-            ],
-            [
-                [0, 1, 4],
-                [2, 3, 5],
-                [0, 0, 0],
-                [0, 0, 0]
-            ],
-            [
-                [0, 3, 2],
-                [4, 1, 5],
-                [0, 0, 0],
-                [0, 0, 0]
-            ]
-        ]
         const liveTimes = [
             [[
-                new Date("2020/06/29 04:00:00 -0400"),
-                new Date("2020/06/29 13:00:00 -0400"),
-                new Date("2020/06/29 16:00:00 -0400"),
-                new Date("2020/06/30 01:00:00 -0400")
-            ], "Opening Session", 0.5],
-            [[
                 new Date("2020/06/29 04:30:00 -0400"),
-                new Date("2020/06/30 13:30:00 -0400"),
                 new Date("2020/06/29 16:30:00 -0400"),
+                new Date("2020/06/30 13:30:00 -0400"),
                 new Date("2020/07/01 01:30:00 -0400")
-            ], "Plenary: Yoshinori Ohsumi", 1],
+            ], "Yoshinori Ohsumi", 1],
             [[
-                new Date("2020/06/30 04:00:00 -0400"),
                 new Date("2020/06/29 14:00:00 -0400"),
-                new Date("2020/06/30 16:00:00 -0400"),
-                new Date("2020/06/30 02:00:00 -0400")
-            ], "Plenary: Katherine High", 1],
+                new Date("2020/06/30 02:00:00 -0400"),
+                new Date("2020/06/30 04:00:00 -0400"),
+                new Date("2020/06/30 16:00:00 -0400")
+            ], "Katherine High", 1],
             [[
-                new Date("2020/06/30 05:00:00 -0400"),
                 new Date("2020/06/29 13:30:00 -0400"),
-                new Date("2020/06/30 17:00:00 -0400"),
-                new Date("2020/06/30 01:30:00 -0400")
+                new Date("2020/06/30 01:30:00 -0400"),
+                new Date("2020/06/30 05:00:00 -0400"),
+                new Date("2020/06/30 17:00:00 -0400")
             ], "The Magic of Bob Langer", 0.5],
             [[
                 new Date("2020/06/29 05:30:00 -0400"),
-                new Date("2020/06/30 13:00:00 -0400"),
                 new Date("2020/06/29 17:30:00 -0400"),
+                new Date("2020/06/30 13:00:00 -0400"),
                 new Date("2020/07/01 01:00:00 -0400")
-            ], "TBD", 0.5],
-            [[
-                new Date("2020/06/30 05:30:00 -0400"),
-                new Date("2020/06/30 14:30:00 -0400"),
-                new Date("2020/06/30 17:30:00 -0400"),
-                new Date("2020/07/01 02:30:00 -0400")
-            ], "Closing session", 0.5]
-        ];
-        const programs = [
-            "<u>The LIVE Program for Europe, Africa, Asia, and Australia</u>",
-            "<u>The LIVE Program for the Americas</u>",
-            "<u>The Western Americas Program</u>",
-            "<u>The Western Pacific Program</u>"
+            ], "Mysteries, Mistakes, and Miracles", 0.5]
         ];
         const times = $(".times");
         times.hide();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
             $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
         }
-        let lat, lng;
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -162,7 +79,6 @@
             }
         });
 
-        $('input[type="radio"]').click(handler);
         go.click(handler);
         loc.on('keyup', function (e) {
             if (e.keyCode === 13) {
@@ -172,11 +88,6 @@
 
         function handler() {
             $(".inner").text("...");
-            const selected = $('input[name=session]:checked').val();
-            if (!selected) {
-                alert("Please select a session");
-                return;
-            }
             geocoder.geocode({ 'address': loc.val() }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     const latitude = results[0].geometry.location.lat();
@@ -199,19 +110,18 @@
 
                             let lTimes = []
                             for (let i = 0; i < 4; i ++) {
-                                let programInner = programs[i];
-                                for (let j = 0; j < programMap[i][selected].length; j++) {
-                                    const index = programMap[i][selected][j];
-                                    let targetDate = liveTimes[index][0][i];
+                                let programInner = i < 2 ? `<u>Plenary Talk ${i + 1}: ` : `<u>Special Session ${i - 1}: `;
+                                programInner += `${liveTimes[i][1]}</u>`;
+                                for (let j = 0; j < 4; j++) {
+                                    let targetDate = liveTimes[i][0][j];
                                     timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                                     localdate = new Date(timestamp * 1000 + offsets);
-                                    programInner += "<p style='padding-left: 1em; padding-top:1em; margin: 0'>" + liveTimes[index][1] + (programMap[i][selected * 1 + 2][j] ? " (LIVE):" : ":") + "</p>";
-                                    programInner += "<p style='padding-left: 3em; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(liveTimes[index][2], 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
+                                    programInner += "<p style='padding-left: 1em; margin: 0.5em;'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(liveTimes[i][2], 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + (j == 0 ? " (LIVE)" : " (Repeat)") + "</p>";
                                 }
                                 lTimes.push(programInner);
                             }
 
-                            $("#time-label").text("This session will take place at the following times:");
+                            $("#time-label").text("These sessions will take place at the following times:");
                             live.html(lTimes.join("<br>"));
 
                             times.show();
@@ -241,9 +151,46 @@
         }
 
         function geoSuccess(position) {
-            lat = position.coords.latitude
-            lng = position.coords.longitude;
-            displayLocation(lat, lng);
+            let latitude = position.coords.latitude
+            let longitude = position.coords.longitude;
+            displayLocation(latitude, longitude);
+            let timestamp = liveTimes[0][0][0].getTime() / 1000 + liveTimes[0][0][0].getTimezoneOffset() * 60;
+
+            const method = 'GET';
+            const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
+
+            request = new XMLHttpRequest();
+
+            request.open(method, url);
+            request.onload = function () {
+                if (request.status === 200) {
+                    const data = JSON.parse(request.responseText);
+                    const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
+
+                    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+                    let lTimes = []
+                    for (let i = 0; i < 4; i ++) {
+                        let programInner = i < 2 ? `<u>Plenary Talk ${i + 1}: ` : `<u>Special Session ${i - 1}: `;
+                        programInner += `${liveTimes[i][1]}</u>`;
+                        for (let j = 0; j < 4; j++) {
+                            let targetDate = liveTimes[i][0][j];
+                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                            localdate = new Date(timestamp * 1000 + offsets);
+                            programInner += "<p style='padding-left: 1em; margin: 0.5em;'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(liveTimes[i][2], 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + (j == 0 ? " (LIVE)" : " (Repeat)") + "</p>";
+                        }
+                        lTimes.push(programInner);
+                    }
+
+                    $("#time-label").text("These sessions will take place at the following times:");
+                    live.html(lTimes.join("<br>"));
+
+                    times.show();
+                } else {
+                    fail();
+                }
+            }
+            request.send();
         }
 
         function geoError() {

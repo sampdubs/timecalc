@@ -15,7 +15,7 @@
     <div style="text-align: center;">
         <h1>Welcome to the Controlled Release Society Technical Session Time Calculator</h1>
     </div>
-    <h3 style="padding-bottom: 0.5em;">Please enter your location:</h3>
+    <h3>Please enter your location:</h3>
     <div>
         <input type="text" id="loc" placeholder="Enter your location"
             style="width: 100%; height: 2em; font-size: larger;" />
@@ -23,9 +23,33 @@
     <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
         location</button>
     <br />
-    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 0.5em; font-size: 1.17em">Please enter your location</h2>
+    <h3>Please select your session:</h3>
+    <div style="padding-left: 1em;">
+        <div>
+            <input type="radio" id="1" name="session" value="1">
+            <label for="1">Technical Session 1</label>
+        </div>
+        <div>
+            <input type="radio" id="2" name="session" value="2">
+            <label for="2">Technical Session 2</label>
+        </div>
+        <div>
+            <input type="radio" id="3" name="session" value="3">
+            <label for="3">Technical Session 3</label>
+        </div>
+        <div>
+            <input type="radio" id="4" name="session" value="4">
+            <label for="4">Technical Session 4</label>
+        </div>
+    </div>
+    <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please select a session</h2>
     <div style="text-align: left;" class="times">
-        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal">...</h3>
+        <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
+    </div>
+    <h3 class="times" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">The session will repeat at the following
+        time:</h2>
+    <div style="text-align: left;" class="times">
+        <h3 class="inner" id="repeat" style="background-color: white; display: inline-block; margin-top: 0; margin-left: 1em; font-weight:normal">...</h3>
     </div>
     <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
         following time:</h2>
@@ -67,6 +91,7 @@
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
             $("#mobile-hide").html('<a href="/"><h2>‹Home</h2></a');
         }
+        let lat, lng;
         const geocoder = new google.maps.Geocoder();
         let highlight = false;
 
@@ -77,6 +102,7 @@
             }
         });
 
+        $('input[type="radio"]').click(handler);
         go.click(handler);
         loc.on('keyup', function (e) {
             if (e.keyCode === 13) {
@@ -86,12 +112,17 @@
 
         function handler() {
             $(".inner").text("...");
+            const selected = $('input[name=session]:checked').val();
+            if (!selected) {
+                alert("Please select a session");
+                return;
+            }
             geocoder.geocode({ 'address': loc.val() }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
                     displayLocation(latitude, longitude);
-                    let targetDate = liveTimes[0];
+                    let targetDate = liveTimes[selected - 1];
                     let timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
 
                     const method = 'GET';
@@ -104,24 +135,17 @@
                         if (request.status === 200) {
                             const data = JSON.parse(request.responseText);
                             const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
+                            let localdate = new Date(timestamp * 1000 + offsets);
                             const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-                            let lTimes = [];
-                            for (let i = 0; i < liveTimes.length; i ++) {
-                                targetDate = liveTimes[i];
-                                timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                let localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push("<u>Technical session " + (i + 1) + ":</u>");
-                                lTimes.push(`<span style="padding-left:1em">${localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })} (LIVE)</span>`);
-                            
-                                targetDate = repeatTimes[i];
-                                timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                localdate = new Date(timestamp * 1000 + offsets);
-                                lTimes.push(`<span style="padding-left:1em">${localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })} (Repeat)</span><br>`);
-                            }
-                            live.html(lTimes.join("<br>"));
-                            $("#time-label").text("The technical sessions will take place at the following times:")
+                            $("#time-label").text("This session will take place LIVE at the following time:");
+                            live.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+
+                            targetDate = repeatTimes[selected - 1];
+                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
+                            localdate = new Date(timestamp * 1000 + offsets);
+                            repeat.text(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
+
 
                             times.show();
                         } else {
@@ -150,47 +174,9 @@
         }
 
         function geoSuccess(position) {
-            let latitude = position.coords.latitude
-            let longitude = position.coords.longitude;
-            displayLocation(latitude, longitude);
-            let targetDate = liveTimes[0];
-            let timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-
-            const method = 'GET';
-            const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-            request = new XMLHttpRequest();
-
-            request.open(method, url);
-            request.onload = function () {
-                if (request.status === 200) {
-                    const data = JSON.parse(request.responseText);
-                    const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
-                    const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
-                    let lTimes = [];
-                    for (let i = 0; i < liveTimes.length; i ++) {
-                        targetDate = liveTimes[i];
-                        timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                        let localdate = new Date(timestamp * 1000 + offsets);
-                        lTimes.push("<u>Technical session " + (i + 1) + ":</u>");
-                        lTimes.push(`<span style="padding-left:1em">${localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })} (LIVE)</span>`);
-                    
-                        targetDate = repeatTimes[i];
-                        timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                        localdate = new Date(timestamp * 1000 + offsets);
-                        lTimes.push(`<span style="padding-left:1em">${localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(2, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })} (Repeat)</span><br>`);
-                    }
-                    live.html(lTimes.join("<br>"));
-                    $("#time-label").text("The technical sessions will take place at the following times:")
-
-                    times.show();
-                } else {
-                    fail();
-                }
-            }
-            request.send();
+            lat = position.coords.latitude
+            lng = position.coords.longitude;
+            displayLocation(lat, lng);
         }
 
         function geoError() {
