@@ -178,11 +178,16 @@
                     const options = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
                     let lTimes = []
-                    for (let i = 0; i < 8; i++) {
+                    for (let i = 0; i < liveTimes.length; i++) {
                         let programInner = "<p style='padding-left: 1em; padding-top:1em; margin: 0'>" + headers[i] + "</p>";
                         let targetDate = liveTimes[i];
                         timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
                         localdate = new Date(timestamp * 1000 + offsets);
+                        if (i == 0) {
+                            lTimes.push("<br><b>Poster Meetups:</b><br>")
+                        } else if (i === liveTimes.length / 2) {
+                            lTimes.push("<br><b>On-Demand Talk Meetups:</b><br>")
+                        }
                         programInner += "<p style='padding-left: 3em; margin: 0'>" + localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1.5, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }) + "</p>";
                         lTimes.push(programInner);
                     }
