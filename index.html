@@ -21,344 +21,46 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <img src="banner.jpg" width=100% />
-    <!-- <div style="text-align: center;">
-        <h1>Welcome to the Controlled Release Society Time Calculator</h1>
-        <h3>As an international conference, there will be events happening around the clock. <br><br>While you are welcome to participate in any of the sessions at any time,<br>we have <a href="#below">sample programs</a> below that you may find convenient for your time zone. </h3>
-    </div> -->
     <h2 style="font-size: 1.2em; padding-top: 1em;">Please select from the events below to learn when they will be held in your local time zone!</h2>
     <ul style="font-size: 1.2em;">
         <li style="padding-bottom: 0.3em;">
-            <a href="/plenary/">Plenary talks and special sessions</a>
+            <a href="plenary/">Plenary talks and special sessions</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/technicalsessions/">Technical sessions</a>
+            <a href="technicalsessions/">Technical sessions</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/techforums/">Technology forums</a>
+            <a href="techforums/">Technology forums</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/exhibition/">Exhibition hall</a>
+            <a href="exhibition/">Exhibition hall</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/workshop/">Post-conference workshops</a>
+            <a href="workshop/">Post-conference workshops</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/firsttimers/">First-timers welcome</a>
+            <a href="firsttimers/">First-timers welcome</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/WIS/">Women in Science event</a>
+            <a href="WIS/">Women in Science event</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/CandDP/"> History of Controlled Release in Consumer & Diversified Products</a>
+            <a href="CandDP/"> History of Controlled Release in Consumer & Diversified Products</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/meetups/">Meetups</a>
+            <a href="meetups/">Meetups</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/focusgroup/">Focus Group membership meetings</a>
+            <a href="focusgroup/">Focus Group membership meetings</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/leadership/">Controlled Release Society leadership meetings</a>
+            <a href="leadership/">Controlled Release Society leadership meetings</a>
         </li>
         <li style="padding-bottom: 0.3em;">
-            <a href="/editorial/">Journal editorial board meetings</a>
+            <a href="editorial/">Journal editorial board meetings</a>
         </li>
     </ul>
 
-    <!-- <span id="below">
-        <h3 style="padding-top: 1em;">Below are four suggested conference programs based on different time zones.</h3>
-        <div>
-            <input type="text" id="loc" placeholder="Enter your location"
-                style="width: 100%; height: 2em; font-size: larger;" />
-        </div>
-        <button id="go" style="height: 5%;font-size: larger; text-align: center; margin: 1em;">Update
-            location</button>
-        <br>
-        <h3 id="time-label" style="background-color: white; display: inline-block; margin-bottom: 5px; font-size: 1.17em">Please enter your location</h2>
-        <div style="text-align: left;" class="times">
-            <h3 class="inner" id="live" style="background-color: white; display: inline-block; margin-top: 0; font-weight:normal">...</h3>
-        </div>
-    </span> -->
-
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script>
-        const loc = $("#loc");
-        const go = $("#go");
-        const geocoder = new google.maps.Geocoder();
-        let highlight = false;
-        const programs = [
-            "<b>The LIVE Program for Europe, Africa, Asia, and Australia</b>",
-            "<b>The LIVE Program for the Americas</b>",
-            "<b>The Western Americas Program</b>",
-            "<b>The Western Pacific Program</b>"
-        ];
-        const live = $("#live");
-        const liveTimes = [
-            [
-                new Date("2020/06/29 04:00:00 -0400"),
-                new Date("2020/06/29 06:00:00 -0400"),
-                new Date("2020/06/29 07:00:00 -0400"),
-                new Date("2020/06/29 09:00:00 -0400"),
-                new Date("2020/06/29 10:00:00 -0400"),
-            ],
-            [
-                new Date("2020/06/29 07:00:00 -0400"),
-                new Date("2020/06/29 09:00:00 -0400"),
-                new Date("2020/06/29 10:00:00 -0400"),
-                new Date("2020/06/29 12:00:00 -0400"),
-                new Date("2020/06/29 13:00:00 -0400"),
-            ],
-            [
-                new Date("2020/06/29 16:00:00 -0400"),
-                new Date("2020/06/29 18:00:00 -0400"),
-                new Date("2020/06/29 19:00:00 -0400"),
-                new Date("2020/06/29 21:00:00 -0400"),
-                new Date("2020/06/29 22:00:00 -0400"),
-            ],
-            [
-                new Date("2020/06/29 19:00:00 -0400"),
-                new Date("2020/06/29 21:00:00 -0400"),
-                new Date("2020/06/29 22:00:00 -0400"),
-                new Date("2020/06/30 00:00:00 -0400"),
-                new Date("2020/06/30 01:00:00 -0400"),
-            ]
-        ]
-        const timeLengths = [
-            [2, 1, 2, 1, 2],
-            [2, 1, 2, 1, 2],
-            [2, 1, 2, 1, 2],
-            [2, 1, 2, 1, 2]
-        ]
-        const labels = [
-            [
-                "Plenary sessions (LIVE)",
-                "Break, Exhibition hall, Tech forums (LIVE)",
-                "Technical sessions (LIVE)",
-                "Break, Exhibition hall, Tech forums (LIVE)",
-                "Technical sessions (LIVE)"
-            ],
-            [
-                "Technical sessions (LIVE)",
-                "Break, Exhibition hall, Tech forums (LIVE)",
-                "Technical sessions (LIVE)",
-                "Break, Exhibition hall, Tech forums (LIVE)",
-                "Plenary sessions (LIVE)",
-            ],
-            [
-                "Plenary sessions",
-                "Break, Exhibition hall, Tech forums",
-                "Technical sessions",
-                "Break, Exhibition hall, Tech forums",
-                "Technical sessions"
-            ],
-            [
-                "Technical sessions",
-                "Break, Exhibition hall, Tech forums",
-                "Technical sessions",
-                "Break, Exhibition hall, Tech forums",
-                "Plenary sessions",
-            ]
-        ]
-        const times = $(".times");
-        times.hide();
-
-        loc.click(function () {
-            if (highlight) {
-                $(this).select();
-                highlight = false;
-            }
-        });
-
-        go.click(handler);
-        loc.on('keyup', function (e) {
-            if (e.keyCode === 13) {
-                handler();
-            }
-        });
-
-        function handler() {
-            $(".inner").text("...");
-            geocoder.geocode({ 'address': loc.val() }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    const latitude = results[0].geometry.location.lat();
-                    const longitude = results[0].geometry.location.lng();
-                    displayLocation(latitude, longitude);
-                    let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
-
-                    const method = 'GET';
-                    const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-                    request = new XMLHttpRequest();
-
-                    request.open(method, url);
-                    request.onload = function () {
-                        if (request.status === 200) {
-                            const data = JSON.parse(request.responseText);
-                            const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
-                            let lTimes = []
-                            for (let i = 0; i < 4; i ++) {
-                                let programInner = "<p style='margin: 0px; margin-bottom: 8px;'>" + programs[i] + "</p>";
-                                for (let j = 0; j < 5; j ++) {
-                                    let targetDate = liveTimes[i][j];
-                                    timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                                    localdate = new Date(timestamp * 1000 + offsets);
-                                    programInner += "<p style='padding-left: 1em; margin: 3px; display: default;'>"
-                                    const today = localdate.toLocaleDateString("en-US", { weekday: 'long' });
-                                    const startTime =  localdate.toLocaleTimeString("en-US", { timeStyle: 'short' });
-                                    const endTime =  moment(localdate).add(timeLengths[i][j], 'h').toDate().toLocaleTimeString("en-US", { timeStyle: 'short' });
-                                    let tomorrowDate = new Date(localdate.valueOf());
-                                    tomorrowDate.setDate(localdate.getDate() + 1);
-                                    const tomorrow = tomorrowDate.toLocaleDateString("en-US", { weekday: 'long' });
-                                    programInner += today + " & " + tomorrow + " <span style='font-size:16px'>@</span> " + startTime + " - " + endTime;
-                                    programInner += "&emsp;&emsp;&emsp;<span style='float: right;'>" + labels[i][j] + "</span>";
-                                    programInner += "</p>";
-                                }
-                                lTimes.push(programInner);
-                            }
-
-                            $("#time-label").text("");
-                            live.html(lTimes.join("<br>"));
-
-                            times.show();
-                        } else {
-                            fail();
-                        }
-                    }
-                    request.send();
-                } else {
-                    fail();
-                }
-            });
-        }
-
-        function fail() {
-            times.hide();
-            $("#time-label").text("Uh oh... something went wrong. Please try again.")
-        }
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                loc.val("Retrieving location, please wait...");
-                navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        }
-
-        function geoSuccess(position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-            displayLocation(latitude, longitude);
-            let timestamp = liveTimes[0][0].getTime() / 1000 + liveTimes[0][0].getTimezoneOffset() * 60;
-
-            const method = 'GET';
-            const url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latitude + ',' + longitude + '&timestamp=' + timestamp + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-            request = new XMLHttpRequest();
-
-            request.open(method, url);
-            request.onload = function () {
-                if (request.status === 200) {
-                    const data = JSON.parse(request.responseText);
-                    const offsets = data.dstOffset * 1000 + data.rawOffset * 1000; // get DST and time zone offsets in milliseconds
-
-                    let lTimes = []
-                    for (let i = 0; i < 4; i ++) {
-                        let programInner = "<p style='margin: 0px; margin-bottom: 8px;'>" + programs[i] + "</p>";
-                        for (let j = 0; j < 5; j ++) {
-                            let targetDate = liveTimes[i][j];
-                            timestamp = targetDate.getTime() / 1000 + targetDate.getTimezoneOffset() * 60;
-                            localdate = new Date(timestamp * 1000 + offsets);
-                            programInner += "<p style='padding-left: 1em; margin: 3px; display: default;'>"
-                            const today = localdate.toLocaleDateString("en-US", { weekday: 'long' });
-                            const startTime =  localdate.toLocaleTimeString("en-US", { timeStyle: 'short' });
-                            const endTime =  moment(localdate).add(timeLengths[i][j], 'h').toDate().toLocaleTimeString("en-US", { timeStyle: 'short' });
-                            let tomorrowDate = new Date(localdate.valueOf());
-                            tomorrowDate.setDate(localdate.getDate() + 1);
-                            const tomorrow = tomorrowDate.toLocaleDateString("en-US", { weekday: 'long' });
-                            programInner += today + " & " + tomorrow + " <span style='font-size:16px'>@</span> " + startTime + " - " + endTime;
-                            programInner += "&emsp;&emsp;&emsp;<span style='float: right;'>" + labels[i][j] + "</span>";
-                            programInner += "</p>";
-                        }
-                        lTimes.push(programInner);
-                    }
-
-                    $("#time-label").text("");
-                    live.html(lTimes.join("<br>"));
-
-                    times.show();
-                } else {
-                    fail();
-                }
-            }
-            request.send();
-        }
-
-        function geoError() {
-            console.log("Geocoder failed.");
-            loc.val("Could not get location, please enter your location");
-            highlight = true;
-        }
-        $(getLocation);
-
-        function displayLocation(latitude, longitude) {
-            let request = new XMLHttpRequest();
-
-            const method = 'GET';
-            const url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&key=AIzaSyAb94zapDceVmspV65wFj_-iV2AWQk9kwY';
-
-            request.open(method, url, true);
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    const data = JSON.parse(request.responseText);
-
-                    let final = ""
-                    for (let i = 0; i < data.results.length; i++) {
-                        element = data.results[i]
-                        if (element["types"].includes("postal_code")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("locality") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_2") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("administrative_area_level_1") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        } else if (element["types"].includes("country") && element["types"].includes("political")) {
-                            final = element["formatted_address"];
-                            break;
-                        }
-                    }
-
-                    if (!final) {
-                        final = data.results[0]["formatted_address"];
-                    }
-
-                    loc.val(final);
-                    updateText = false;
-                }
-            };
-            request.send();
-        }
-    </script> -->
-
-    <!-- <br>
-    <br>
-    <br>
-    <div style="position: fixed; text-align: right; bottom: 0px; width: 100%; z-index: -1;">
-        <p style="padding-right: 15px;">Like the website? Consider <a href="https://paypal.me/paysampw" 
-                target="blank">donating to the developer</a>!</p>
-    </div> -->
     <div style="position: fixed; text-align: right; bottom: 0px; width: 100%;">
         <p style="padding-right: 15px;">Notice something wrong? <a href="mailto:sammypw1@gmail.com?Subject=CRS%20Time%20Calculator%20website%20feedback">Contact us</a>!</p>
     </div>

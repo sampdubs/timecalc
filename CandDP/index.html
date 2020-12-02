@@ -40,18 +40,6 @@
         <h4 style="background-color: white; display: inline-block; font-weight: normal; margin-top: 0;">We are looking forward to host you and we guarantee virtual mingling with C&DP peers in an open and welcoming atmosphere. Hope to “see” you there!</h4>
         <br><br><br>
     </div>
-    <!-- <h2 style="background-color: white; display: inline-block;">The sessions will be on demand during the
-        following time:</h2>
-    <div style="text-align: center;">
-        <h1 id="on-demand" style="background-color: white; display: inline-block;">Some date - another date</h1>
-    </div> -->
-    <!-- <br>
-    <br>
-    <br>
-    <div style="position: fixed; text-align: right; bottom: 0px; width: 100%; z-index: -1;">
-        <p style="padding-right: 15px;">Like the website? Consider <a href="https://paypal.me/paysampw" 
-                target="blank">donating to the developer</a>!</p>
-    </div> -->
     <div style="position: fixed; text-align: right; bottom: 0px; width: 100%; z-index: -1;">
         <p style="padding-right: 15px;">Notice something wrong? <a href="mailto:sammypw1@gmail.com?Subject=CRS%20Time%20Calculator%20website%20feedback">Contact us</a>!</p>
     </div>
@@ -118,7 +106,6 @@
                                 lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                             }
 
-                            //TODO: NEW TEXT HERE
                             $("#time-label").html("The C&DP Division of CRS invites you all to attend our virtual history event during the 2020 Controlled Release Society Virtual Annual Meeting. In this event, we will review a brief history (approximately 1995-2020) of controlled release in Consumer and Diversified Products (C&DP).<br><br>The C&DP Division has a storied history beginning with the development and commercialization of carbonless copy paper (NCR paper) to pop-rocks. We will discuss the real-world impact of controlled release technology on C&DP, process development, and technology evolution that continues to lead to new applications that touch and improve our lives on a daily basis.<br><br>To accommodate different time zones, we will offer two live moderated sessions:<br>");
 
                             live.html(lTimes.join("<br><br>"));
@@ -182,7 +169,6 @@
                         lTimes.push(localdate.toLocaleDateString("en-US", options) + " - " + moment(localdate).add(1, 'h').toDate().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' }));
                     }
 
-                    //TODO: NEW TEXT HERE
                     $("#time-label").html("The C&DP Division of CRS invites you all to attend our virtual history event during the 2020 Controlled Release Society Virtual Annual Meeting. In this event, we will review a brief history (approximately 1995-2020) of controlled release in Consumer and Diversified Products (C&DP).<br><br>The C&DP Division has a storied history beginning with the development and commercialization of carbonless copy paper (NCR paper) to pop-rocks. We will discuss the real-world impact of controlled release technology on C&DP, process development, and technology evolution that continues to lead to new applications that touch and improve our lives on a daily basis.<br><br>To accommodate different time zones, we will offer two live moderated sessions:<br>");
 
                     live.html(lTimes.join("<br><br>"));
